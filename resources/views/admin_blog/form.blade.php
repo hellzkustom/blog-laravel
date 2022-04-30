@@ -16,7 +16,7 @@
         <div class="row" name="main">
             <div class="col-md-10 col-md-offset-1">
     <h2>ブログ記事投稿・編集</h2>
-
+<a href="{{ route('admin_list') }}">リストに戻る</a>
     @if(session('message'))
         <div class="alert alert-success">
         
@@ -27,6 +27,7 @@
 @include('error')
     
  @include('image_view_index')
+ 
     @if(isset($id))
            <form method="POST" action="{{route('admin_post_article_img')}}" enctype="multipart/form-data" class="image_form">
                      <div class="post_intro">   <input type="file" name="name" accept="image/*" >
@@ -34,7 +35,7 @@
                                       <input type="hidden" name="article_id" value="{{$input['id']}}">
                      
                      </div>
-                    <div class="post_intro"><input type="submit" value="投稿"></input>
+                    <div class="post_intro"><input type="submit"  class="btn btn-primary" value="投稿"></input>
                     </div>
         </form>
  
@@ -146,30 +147,26 @@
     本文<br>
     <textarea class="form_control" cols="50" rows="15" name="body" placeholder="本文を入力してください。">{{isset($input['body']) ? $input['body'] : null}}</textarea><br><br>
   
-        <br><br>
-    <input type="submit" value="送信" name="post">
+        
+    <input type="submit"  class="btn btn-primary" value="送信" name="post">
     {{--article_id があるか無いかで新規作成か既存編集かを区別する--}}
     <input type="hidden" name="id" value="{{ $id }}">
     {{--CSRFトークンが生成される--}}
     {{ csrf_field() }}
 </form>
             @if (isset($id))
-                <br>
-                <br>
-                <form action="{{ route('admin_delete') }}" method="POST">
-                    <input type="submit" class="btn btn-danger btn-sm" value="削除">
-                    <input type="hidden" name="id" value="{{ $id }}">
-                    {{ csrf_field() }}
-                </form>
+            <br><br>
+                            <form action="{{ route('admin_delete') }}" method="POST">
+                            <input type="submit" class="btn btn-danger btn-sm" value="削除">
+                            <input type="hidden" name="id" value="{{ $id }}">
+                        {{ csrf_field() }}
+                 </form>
+                
             @else
                 <br>
                 <br>
                 
             @endif
-            
-        
-                    <br><a href="{{ route('admin_list') }}">リストに戻る</a><br><br>
-
         </div>
     </div>
 </div>    

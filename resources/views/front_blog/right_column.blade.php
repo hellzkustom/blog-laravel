@@ -20,7 +20,22 @@
                 </li>
             </div>
     </div>
-    
+
+@if(strcmp(url()->current(),route('sf5lounge'))==0)
+       <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">リンク</h3>
+        </div>
+        <div class="panel-body">
+        <a href="{{ route('front_index') }}">eふぁいたーっす!</a>
+
+        
+        </div>
+    </div>
+   
+  
+  
+@else  
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">成績</h3>
@@ -46,7 +61,19 @@
         <a href="{{ route('front_analyze') }}">詳細</a>
         </div>
     </div>
-    <div class="panel panel-default">
+    
+     <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">リンク</h3>
+        </div>
+        <div class="panel-body">
+        <a href="{{ route('sf5lounge') }}">SF5ラウンジ募集</a>
+
+        
+        </div>
+    </div>
+   
+       <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">カテゴリー</h3>
         </div>
@@ -83,4 +110,5 @@
             </ul>
         </div>
     </div>
+@endif
 </div>

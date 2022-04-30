@@ -5,6 +5,7 @@ var now_maker;
 var flag;
 var now_latLng;
 
+
 $(document).ready(
     function(){ 
         $('#move').hide();
@@ -43,6 +44,7 @@ $(document).ready(
            map: map
       });
         now_latLng=latLng;
+        
       },
       function(error){
           alert('位置情報取得に失敗しました '+error.message);
@@ -59,15 +61,24 @@ $(document).ready(
       });
       
       $('#move').on('click',function(){
-          if(flag==true)
-          {
-                map.panTo(now_latLng); 
-          }
-          else
-          {
-              alert("現在地のマーカを表示して下さい");
-          }
+         
+          now_marker.setMap(null);
+          
+          navigator.geolocation.getCurrentPosition(function(position) {
+        // 緯度経度の取得
+        latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      now_marker = new google.maps.Marker({
+          position: latLng,
+           map: map
       });
+        now_latLng=latLng;
+        map.panTo(now_latLng); 
+      },
+      function(error){
+          alert('位置情報取得に失敗しました '+error.message);
+      });
+      
+     });
     
         
     $('#clear').on('click',function(){
@@ -152,7 +163,10 @@ $(document).ready(
  //           alert('位置情報取得に失敗しました '+error.message);
  //   });
 });
-
+function now()
+{
+    
+}
 function resetMap(hoge)
 {
         for(i=0;i<markers.length;i++)

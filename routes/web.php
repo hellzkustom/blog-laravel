@@ -26,6 +26,8 @@ Route::get('/article/{id?}', 'FrontBlogController@article')->name('front_article
 Route::post('/comment/post','FrontBlogController@commentPost')->name('commentPost');
 Route::post('/comment/delete','FrontBlogController@commentDelete')->name('commentDelete');
 Route::get('/analyze','FrontBlogController@analyze')->name('front_analyze');
+Route::get('/sf5lounge','TwitterController@index')->name('sf5lounge');
+
 
 Route::prefix('admin')->group(function(){
     Route::get('form/{id?}','AdminBlogController@form')->name('admin_form');

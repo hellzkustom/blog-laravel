@@ -109,7 +109,7 @@ function get_latest_lp(){
 
 function set_title(){
     
-    if($('select[name=category_id]').val()==17||$('select[name=category_id]').val()==19||$('select[name=category_id]').val()==20)
+    if($('select[name=category_id]').val()==17||$('select[name=category_id]').val()==19||$('select[name=category_id]').val()==20||$('select[name=category_id]').val()==23)
     {
                 var obj = new webApi_get_title_count();
                 ajax_action_get_title_count(obj);
