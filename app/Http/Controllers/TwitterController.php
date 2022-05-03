@@ -6,16 +6,42 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use App\User;
-
+use App\Street_fighter_v;
+use App\Http\Controllers\FrontBlogController;
 
 class TwitterController extends Controller
 {
+    
+    public function dayily_post(Request $request)
+    {
+        
+                $t = new CallTwitterApi();
+        $data = $t->serachTweets("hellzkustom 日課投稿",20);
+
+        $array = array();
+        $check=array();
+        foreach($data as $d) {
+        
+              $array[] = array($t->statusesOembed($d->id));
+
+        }
+        
+        $introduction =User::find(1);
+        
+
+       $month_list=FrontBlogController::getMonthList();
+        $category_list=FrontBlogController::getCatgoryList();
+        $result=FrontBlogController::get_data_street_fighter_v();
+            
+         return view('front_blog.dayily_post',['twitter' => $array,'introduction'=>$introduction,'result'=>$result,'month_list'=>$month_list,'category_list'=>$category_list]);
+    }
+    
     //　Twitterのアカウント検索
     public function index(Request $request)
     {
         
         $t = new CallTwitterApi();
-        $data = $t->serachTweets("#ストVラウンジ募集 OR ストVラウンジ OR #スト5ラウンジ募集 OR スト5ラウンジ exclude:retweets");
+        $data = $t->serachTweets("#ストVラウンジ募集 OR ストVラウンジ OR #スト5ラウンジ募集 OR スト5ラウンジ exclude:retweets",10);
 
         $array = array();
         $check=array();
@@ -52,6 +78,8 @@ class TwitterController extends Controller
     //    );
     
           }
+          
+         
 }
 class callTwitterApi
 {
@@ -74,13 +102,15 @@ class callTwitterApi
     }
     
     // 投稿検索
-    public function serachTweets(String $searchWord)
+    public function serachTweets(String $searchWord, Int $cnt)
     {
-        $d = $this->t->get("search/tweets", [
-            'q' => $searchWord,
-            'count' => 10,
-            'result_type'=>'recent'
-         ]);
+
+                $d = $this->t->get("search/tweets", [
+                'q' => $searchWord,
+                'count' => $cnt,
+                'result_type'=>'recent'
+             ]);
+
          
         return $d->statuses;
     }

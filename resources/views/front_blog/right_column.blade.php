@@ -18,18 +18,18 @@
                     <div class="comment">comment:</div> 
                     <div class="comment">{!!nl2br(e($introduction['comment']))!!}</div>
                 </li>
+                
             </div>
+
     </div>
 
-@if(strcmp(url()->current(),route('sf5lounge'))==0)
+@if(strcmp(url()->current(),route('sf5lounge'))==0 )
        <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">リンク</h3>
         </div>
         <div class="panel-body">
-        <a href="{{ route('front_index') }}">eふぁいたーっす!</a>
-
-        
+        <a href="{{ route('front_index') }}">eふぁいたーっす!</a><br>
         </div>
     </div>
    
@@ -58,8 +58,11 @@
         @else
         カジュアル試合なし<br>
         @endif
-        <a href="{{ route('front_analyze') }}">詳細</a>
+        @if(strcmp(url()->current(),route('dayily_post'))!=0 )
+        <a href="{{ route('dayily_post') }}">トレモ風景～</a>
+        @endif
         </div>
+        
     </div>
     
      <div class="panel panel-default">

@@ -25,8 +25,9 @@ Route::get('/', 'FrontBlogController@index')->name('front_index');
 Route::get('/article/{id?}', 'FrontBlogController@article')->name('front_article');
 Route::post('/comment/post','FrontBlogController@commentPost')->name('commentPost');
 Route::post('/comment/delete','FrontBlogController@commentDelete')->name('commentDelete');
-Route::get('/analyze','FrontBlogController@analyze')->name('front_analyze');
+Route::get('/dayily_post','TwitterController@dayily_post')->name('dayily_post');
 Route::get('/sf5lounge','TwitterController@index')->name('sf5lounge');
+
 
 
 Route::prefix('admin')->group(function(){

@@ -28,10 +28,7 @@ class FrontBlogController extends Controller
  //       $this->category = $category;
  //   }
 
-    public function analyze()
-    {
-        return view('front_blog.analyze');
-    }
+
 
 
     
@@ -58,7 +55,7 @@ class FrontBlogController extends Controller
         return view('front_blog.index',compact('list','month_list','category_list','introduction','result'));
     }
     
-        public function get_data_street_fighter_v()
+        public static function get_data_street_fighter_v()
     {
         $start_date= new DateTime('last week');
         $end_date= new DateTime(Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
@@ -105,7 +102,7 @@ class FrontBlogController extends Controller
     }
 
     
-    public function getCatgoryList()
+    public static function getCatgoryList()
     {
         $category_list=Category::select('name','id')
                              ->orderBy('display_order','asc')
@@ -151,7 +148,7 @@ class FrontBlogController extends Controller
         return $query->paginate($num_per_page);
         
     }
-    public function getMonthList()
+    public static function getMonthList()
     {
         $month_list=Article::selectraw('substring(post_date,1,7) AS year_and_month')
                              ->groupBy('year_and_month')
