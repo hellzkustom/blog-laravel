@@ -23,6 +23,12 @@ class AdminBlogController extends Controller
     
     const NUM_PER_PAGE=10;
     
+    //ログイン認証追加
+    public function __construct()
+    {
+        $this->middleware("auth");
+    }
+    
     public function form(int $id =null)
     {
         
@@ -145,11 +151,20 @@ class AdminBlogController extends Controller
     $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
     ->whereDate('articles.post_date','=',$request->input('start_date'))
     ->value('lp');
-
-    $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
-    ->whereDate('articles.post_date','=',$request->input('end_date'))
-    ->value('lp');
     
+    $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+    ->whereDate('articles.post_date','>=',$request->input('start_date'))
+    ->whereDate('articles.post_date','<=',$request->input('end_date'))
+    ->whereNotNull('lp')
+    ->latest('articles.post_date')->value('lp');
+    
+    //->whereDate('articles.post_date','=',$set_date)
+    //->value('lp');
+    
+if (empty($lp_end))
+{
+    $lp_end=$set_date->modify('-1 day')->format('Y/m/d');;
+}
     
     return response()->json([
         'battle_lounge'=>$cnt->battle_lounge,

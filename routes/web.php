@@ -29,7 +29,7 @@ Route::get('/dayily_post','TwitterController@dayily_post')->name('dayily_post');
 Route::get('/sf5lounge','TwitterController@index')->name('sf5lounge');
 
 
-
+//AdminiBlogControllerは、ログイン認証あり
 Route::prefix('admin')->group(function(){
     Route::get('form/{id?}','AdminBlogController@form')->name('admin_form');
 
@@ -40,7 +40,7 @@ Route::prefix('admin')->group(function(){
     Route::get('post/get_latest_lp','AdminBlogController@get_latest_lp')->name('admin_get_latest_lp');
     Route::get('post/get_title_count','AdminBlogController@get_title_count')->name('admin_get_title_count');
 
-    
+    //ログイン認証
     Route::post('delete', 'AdminBlogController@delete')->name('admin_delete');
     Route::get('list','AdminBlogController@list')->name('admin_list');
 
@@ -62,7 +62,7 @@ Route::prefix('admin')->group(function(){
     Route::post('introduction/map/postdata','MapdataController@post')->name('admin_map_post');
     Route::post('introduction/map/deletedata','MapdataController@delete')->name('admin_map_delete');
     Route::get('introduction/mapview','MapdataController@view')->name('admin_map_view');
-
+    //
 });
 
 Auth::routes();
