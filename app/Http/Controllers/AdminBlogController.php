@@ -161,11 +161,6 @@ class AdminBlogController extends Controller
     //->whereDate('articles.post_date','=',$set_date)
     //->value('lp');
     
-if (empty($lp_end))
-{
-    $lp_end=$set_date->modify('-1 day')->format('Y/m/d');;
-}
-    
     return response()->json([
         'battle_lounge'=>$cnt->battle_lounge,
         'battle_lounge_win'=>$cnt->battle_lounge_win,
