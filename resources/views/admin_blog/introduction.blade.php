@@ -37,7 +37,7 @@
     <textarea class="form_control" cols="50" rows="2" name="comment" placeholder="commnetを入力してください。">{{isset($input['comment']) ? $input['comment']: null}}</textarea>
 
     <br><br>
-    <input type="submit" value="送信">
+    <input type="submit" class="btn btn-primary" value="送信">
     {{--article_id があるか無いかで新規作成か既存編集かを区別する--}}
 
     {{--CSRFトークンが生成される--}}
@@ -60,7 +60,8 @@
                                       <input type="hidden" name="user_id" value="{{Auth::id()}}">
                      
                      </div>
-                    <div class="post_intro"><input type="submit" value="投稿"></input>
+                     
+                    <div class="post_intro"><input type="submit" class="btn btn-primary" value="投稿"></input>
                     </div>
         </form>
             

@@ -102,8 +102,7 @@ border-radius: 10px;
 }
 
 .post_intro{
-    display:inline-block;
-    
+    /*display:inline-block;*/
     padding: 5px;
     
 }
