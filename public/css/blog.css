@@ -21,7 +21,8 @@ input[name="title"] {
 
 
 textarea[name="body"] {
-    width: 400px;
+    width:100%;
+box-sizing:border-box;
 }
 .number{
     width:4em;
@@ -140,3 +141,4 @@ margin-right:  15px;
 
 
 }
+

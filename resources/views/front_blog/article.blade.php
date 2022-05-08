@@ -102,7 +102,7 @@ $ck=false;
                                             <form method="POST"  action="{{route('commentDelete')}}">
                                                 <input type="hidden" name="id" value="{{$comment->id}}">
                                                 <input type="hidden" name="article_id" value="{{$article->id}}">
-                                            <input type="submit" value="削除">
+                                            <input type="submit" class="btn btn-danger btn-sm" value="削除">
                                             </form>
                                     </div>
                                     @endif
@@ -155,7 +155,7 @@ $ck=false;
                         <div class="form-group">
                             <label class="col-sm-3">コメント本文</label>
                              <div class="col-sm-10">
-                                   <textarea class="form_control" cols="50" rows="15" name="body" placeholder="本文を入力してください。"></textarea>
+                                   <textarea class="form_control" cols="20" rows="15" name="body" placeholder="本文を入力してください。"></textarea>
                              </div>
                         </div>
                     
