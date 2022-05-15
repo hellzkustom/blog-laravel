@@ -24,11 +24,11 @@
                  <br>
                 
                  {!! nl2br(e($comment->body)) !!}
-                 <br>
-                                 @empty
-                    <p>記事がありません</p>
+                 <br><br>
+                @empty
+                    <p>コメントがありません</p>
                 @endforelse
-
+            {{ $list->links() }}
             </div>
             @include('front_blog.right_column')
             </div>
