@@ -32,12 +32,14 @@ Route::post('/comment/post','FrontBlogController@commentPost')->name('commentPos
 //コメント削除
 Route::post('/comment/delete','FrontBlogController@commentDelete')->name('commentDelete');
 
+//コメント一覧
+Route::get('/comment/list','FrontBlogController@commentList')->name('commentList');
+
 //トレモ風景
 Route::get('/dayily_post','TwitterController@dayily_post')->name('dayily_post');
 
 //ラウンジ募集
 Route::get('/sf5lounge','TwitterController@index')->name('sf5lounge');
-
 
 //AdminiBlogControllerは、ログイン認証あり
 Route::prefix('admin')->group(function(){

@@ -206,6 +206,19 @@ class FrontBlogController extends Controller
 
     }
     
-    
-    
+    public function commentList(Request $request)
+    {
+        $list =Comment::paginate(self::NUM_PER_PAGE);//join('articles','comments.article_id','=','articles.id');
+                        
+        $month_list=self::getMonthList();
+        $category_list=self::getCatgoryList();
+        
+        
+        $introduction =User::find(1);
+        
+        $result=self::get_data_street_fighter_v();
+        
+        return view('front_blog.commentList',compact('list','month_list','category_list','introduction','result'));
+ 
+    }   
 }

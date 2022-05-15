@@ -71,8 +71,10 @@
         </div>
         <div class="panel-body">
         <a href="{{ route('sf5lounge') }}">SF5ラウンジ募集</a>
-
-        
+        @if(strcmp(url()->current(),route('commentList'))!=0 )
+        <br>
+        <a href="{{ route('commentList') }}">ノート</a>
+        @endif
         </div>
     </div>
    
