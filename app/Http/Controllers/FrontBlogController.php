@@ -208,7 +208,12 @@ class FrontBlogController extends Controller
     
     public function commentList(Request $request)
     {
-        $list =Comment::orderby('id','desc')->paginate(self::NUM_PER_PAGE);//join('articles','comments.article_id','=','articles.id');
+        $list =Comment::join('articles','comments.article_id','=','articles.id')
+            ->orWhere('articles.category_id','=',17 )
+             ->orWhere('articles.category_id','=',19)
+            ->orWhere('articles.category_id','=',20 )
+            ->orWhere('articles.category_id','=',23 )
+            ->orderby('comments.id','desc')->paginate(self::NUM_PER_PAGE);//join('articles','comments.article_id','=','articles.id');
                         
         $month_list=self::getMonthList();
         $category_list=self::getCatgoryList();

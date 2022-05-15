@@ -20,11 +20,17 @@
             <div class="col-md-7 col-md-offset-1">
                 {{--forelse ディレクティブを使うと、データがあるときはループし、無いときは @empty 以下を実行する--}}
                 @forelse($list as $comment)
-                 {!! nl2br(e($comment->updated_at)) !!}
-                 <br>
-                
-                 {!! nl2br(e($comment->body)) !!}
-                 <br><br>
+                        <a href="{{ route('front_article', ['id' => $comment->article_id]) }}">
+                        {{$comment->article->title}}
+                        </a>
+        
+                         <br>
+                        
+                         {!! nl2br(e($comment->body)) !!}
+                         <br>
+                         {!! nl2br(e($comment->updated_at)) !!}
+                         <br>
+                         <br>
                 @empty
                     <p>コメントがありません</p>
                 @endforelse
