@@ -19,13 +19,16 @@
 
             <div class="col-md-7 col-md-offset-1">
                 {{--forelse ディレクティブを使うと、データがあるときはループし、無いときは @empty 以下を実行する--}}
+                
+
                 @forelse($list as $comment)
                         <a href="{{ route('front_article', ['id' => $comment->article_id]) }}">
-                        {{$comment->article->title}}
+                        {{$comment->title}}
                         </a>
         
                          <br>
-                        
+                                      
+                                      
                          {!! nl2br(e($comment->body)) !!}
                          <br>
                          {!! nl2br(e($comment->updated_at)) !!}

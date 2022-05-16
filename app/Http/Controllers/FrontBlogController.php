@@ -208,7 +208,11 @@ class FrontBlogController extends Controller
     
     public function commentList(Request $request)
     {
-        $list =Comment::join('articles','comments.article_id','=','articles.id')
+        $list =Comment::selectRaw('comments.body as body,
+                                    articles.id as article_id,
+                                    articles.title as title,
+                                    comments.updated_at as updated_at')
+            ->join('articles','comments.article_id','=','articles.id')
             ->orWhere('articles.category_id','=',17 )
              ->orWhere('articles.category_id','=',19)
             ->orWhere('articles.category_id','=',20 )
