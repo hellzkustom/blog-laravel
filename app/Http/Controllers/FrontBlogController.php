@@ -209,35 +209,39 @@ class FrontBlogController extends Controller
     public function commentList(Request $request)
     {
      
-    $items= array();
-    $check = false;
+    $checked_items= array();
+    
      if(empty($request->id17)==false)
      {
-        array_push($items,$request->id17);
-        $check=true;
-     }
+        array_push($checked_items,$request->id17);
+         }
          if(empty($request->id19)==false)
      {
-        array_push($items,$request->id19);
-        $check=true;
+        array_push($checked_items,$request->id19);
      }
           if(empty($request->id20)==false);
      {
-        array_push($items,$request->id20);
-        $check=true;
+        array_push($checked_items,$request->id20);
      }
      
           if(empty($request->id23)==false)
      {
-        array_push($items,$request->id23);
-        $check=true;
+        array_push($checked_items,$request->id23);
      }
 
-        $items = array_filter($items);
+
+          if(empty($request->id24)==false)
+     {
+        array_push($checked_items,$request->id24);
+     }
+
+
+
+        $checked_items = array_filter($checked_items);
         
-        if(count($items)==0)
+        if(count($checked_items)==0)
         {
-        $items=[17,19,20,23];
+        $checked_items=[17,19,20,23];
     
         }
 
@@ -246,11 +250,7 @@ class FrontBlogController extends Controller
                                     articles.title as title,
                                     comments.updated_at as updated_at')
             ->join('articles','comments.article_id','=','articles.id')
-           ->whereIn('articles.category_id',$items)
-           // ->orWhere($item17)
-        //    ->orWhere($item19)
-        //    ->orWhere($itme20)
-         //   ->orWhere($item23)
+           ->whereIn('articles.category_id',$checked_items)
             ->orderby('comments.id','desc')->paginate(self::NUM_PER_PAGE);
                         
         $month_list=self::getMonthList();
@@ -261,7 +261,7 @@ class FrontBlogController extends Controller
         
         $result=self::get_data_street_fighter_v();
         $name=$request->name;
-        return view('front_blog.commentList',compact('list','month_list','category_list','introduction','result'));
+        return view('front_blog.commentList',compact('list','month_list','category_list','introduction','result','checked_items'));
  
     }   
 }

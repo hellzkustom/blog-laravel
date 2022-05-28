@@ -25,10 +25,11 @@
     <form method="GET" action="/comment/list">
         @csrf
 
-        オンライン対戦後反省会<input type="checkbox" name="id17" value="17"><br>
-        オンライン対戦後反省会まとめ<input type="checkbox" name="id19" value="19"><br>
-        オフライントレーニング<input type="checkbox" name="id20" value="20" ><br>
-        格ゲーオフ会参加<input type="checkbox" name="id23" value="23" ><br>
+        オンライン対戦後反省会<input type="checkbox" name="id17" value="17" {{in_array(17,$checked_items) ? 'checked' : ''}}><br>
+        オンライン対戦後反省会まとめ<input type="checkbox" name="id19" value="19" {{in_array(19,$checked_items) ? 'checked' : ''}}><br>
+        オフライントレーニング<input type="checkbox" name="id20" value="20" {{in_array(20,$checked_items) ? 'checked' : ''}} ><br>
+        格ゲーオフ会参加<input type="checkbox" name="id23" value="23" {{in_array(23,$checked_items) ? 'checked' : ''}}><br>
+        ブログ仕様<input type="checkbox" name="id24" value="24" {{in_array(24,$checked_items) ? 'checked' : ''}}><br>
         <br>
         <input type="submit" name="submit" class="btn btn-primary" value="検索" />
     
