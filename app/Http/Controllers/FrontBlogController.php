@@ -208,16 +208,50 @@ class FrontBlogController extends Controller
     
     public function commentList(Request $request)
     {
+     
+    $items= array();
+    $check = false;
+     if(empty($request->id17)==false)
+     {
+        array_push($items,$request->id17);
+        $check=true;
+     }
+         if(empty($request->id19)==false)
+     {
+        array_push($items,$request->id19);
+        $check=true;
+     }
+          if(empty($request->id20)==false);
+     {
+        array_push($items,$request->id20);
+        $check=true;
+     }
+     
+          if(empty($request->id23)==false)
+     {
+        array_push($items,$request->id23);
+        $check=true;
+     }
+
+        $items = array_filter($items);
+        
+        if(count($items)==0)
+        {
+        $items=[17,19,20,23];
+    
+        }
+
         $list =Comment::selectRaw('comments.body as body,
                                     articles.id as article_id,
                                     articles.title as title,
                                     comments.updated_at as updated_at')
             ->join('articles','comments.article_id','=','articles.id')
-            ->orWhere('articles.category_id','=',17 )
-             ->orWhere('articles.category_id','=',19)
-            ->orWhere('articles.category_id','=',20 )
-            ->orWhere('articles.category_id','=',23 )
-            ->orderby('comments.id','desc')->paginate(self::NUM_PER_PAGE);//join('articles','comments.article_id','=','articles.id');
+           ->whereIn('articles.category_id',$items)
+           // ->orWhere($item17)
+        //    ->orWhere($item19)
+        //    ->orWhere($itme20)
+         //   ->orWhere($item23)
+            ->orderby('comments.id','desc')->paginate(self::NUM_PER_PAGE);
                         
         $month_list=self::getMonthList();
         $category_list=self::getCatgoryList();
@@ -226,7 +260,7 @@ class FrontBlogController extends Controller
         $introduction =User::find(1);
         
         $result=self::get_data_street_fighter_v();
-        
+        $name=$request->name;
         return view('front_blog.commentList',compact('list','month_list','category_list','introduction','result'));
  
     }   
