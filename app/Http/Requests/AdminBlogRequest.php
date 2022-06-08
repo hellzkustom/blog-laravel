@@ -37,13 +37,13 @@ class AdminBlogRequest extends FormRequest
                     'category_id'=>'required|integer|min:1',
        
             'battle_lounge'=> 'integer|nullable',
-            'battle_lounge_win'=> 'integer|nullable',
+            'battle_lounge_win'=> 'integer|nullable|lte:battle_lounge',
             
             'rank_match'=> 'integer|nullable',
-            'rank_match_win'=> 'integer|nullable',
+            'rank_match_win'=> 'integer|nullable|lte:rank_match',
             
             'casual_match'=> 'integer|nullable',
-            'casual_match_win'=> 'integer|nullable',
+            'casual_match_win'=> 'integer|nullable|lte:casual_match',
             
         ];
 
@@ -127,6 +127,9 @@ class AdminBlogRequest extends FormRequest
             'rank_match_win.integer'=>'勝利数は数字を入力して下さい',
             'battle_lounge_win.integer'=>'勝利数は数字を入力して下さい',
             
+            'casual_match_win.lte'=>'カジュアルマッチの勝利数が試合数より多いです',
+            'rank_match_win.lte'=>'ランクマッチの勝利数が試合数より多いです',
+            'battle_lounge_win.lte'=>'バトルラウンジの勝利数が試合数より多いです',
             
           //    'image_file_name.required'=>'ファイルを選択してください',
              // 'image_file_name.file'=>'アップロードに失敗しました',

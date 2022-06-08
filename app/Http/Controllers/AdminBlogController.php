@@ -77,17 +77,18 @@ class AdminBlogController extends Controller
 
             $article = Article::updateOrCreate(compact('id'), $input);
     
+   
     
-        if(($request->battle_lounge<$request->battle_lounge_win) 
-    ||($request->rank_match<$request->rank_match_win)
-    ||($request->casual_match<$request->casual_match_win)
-    ||isset($request->lp)==false)
-    {
-            return redirect()->route('admin_form',  ['id' => $article->id])->with('message','勝利数が試合数より多い');
-        
-    }
+   //     if(($request->battle_lounge<$request->battle_lounge_win) 
+//    ||($request->rank_match<$request->rank_match_win)
+//    ||($request->casual_match<$request->casual_match_win)
+ //   ||isset($request->lp)==false)
+ //   {
+ //           return redirect()->route('admin_form',  ['id' => $article->id])->with('message','勝利数が試合数より多い');
+ //       
+ //   }
     
-    
+   
     
     
     if(isset($request->battle_lounge) ||isset($request->battle_lounge_win) 
