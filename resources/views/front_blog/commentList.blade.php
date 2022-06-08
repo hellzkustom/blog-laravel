@@ -24,19 +24,18 @@
                 
     <form method="GET" action="/comment/list">
         @csrf
-
+ 
         <input type="checkbox" name="id17" value="17" {{in_array(17,$checked_items) ? 'checked' : ''}}>オンライン対戦後反省会<br>
         <input type="checkbox" name="id19" value="19" {{in_array(19,$checked_items) ? 'checked' : ''}}>オンライン対戦後反省会まとめ<br>
         <input type="checkbox" name="id20" value="20" {{in_array(20,$checked_items) ? 'checked' : ''}} >オフライントレーニング<br>
         <input type="checkbox" name="id23" value="23" {{in_array(23,$checked_items) ? 'checked' : ''}}>格ゲーオフ会参加<br>
-        <input type="checkbox" name="id24" value="24" {{in_array(24,$checked_items) ? 'checked' : ''}}>ブログ仕様<br>
+        <input type="checkbox" name="id24" value="24" {{in_array("word",$checked_items) ? 'checked' : ''}}>ブログ仕様<br>
         <br>
+        キーワード：<input type="text" name="word" value="{{$word}}"><br><br>
         <input type="submit" name="submit" class="btn btn-primary" value="検索" />
     
         </form>
         <br>
-
-        
                 @forelse($list as $comment)
                         <a href="{{ route('front_article', ['id' => $comment->article_id]) }}">
                         {{$comment->title}}

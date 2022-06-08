@@ -244,12 +244,23 @@ class FrontBlogController extends Controller
         $checked_items=[17,19,20,23];
     
         }
+   
+     $where_items=array();
+  $preg_split = preg_split("/\s/",mb_convert_kana($request->word,"s"));
+  
+  foreach ($preg_split as $item)
+  {
+          array_push($where_items,['comments.body','Like','%'.$item.'%']);
+  }
+  
+  
 
         $list =Comment::selectRaw('comments.body as body,
                                     articles.id as article_id,
                                     articles.title as title,
                                     comments.updated_at as updated_at')
             ->join('articles','comments.article_id','=','articles.id')
+            ->where($where_items)
            ->whereIn('articles.category_id',$checked_items)
             ->orderby('comments.id','desc')->paginate(self::NUM_PER_PAGE);
                         
@@ -261,7 +272,7 @@ class FrontBlogController extends Controller
         
         $result=self::get_data_street_fighter_v();
         $name=$request->name;
-        return view('front_blog.commentList',compact('list','month_list','category_list','introduction','result','checked_items'));
+        return view('front_blog.commentList',compact('list','month_list','category_list','introduction','result','checked_items'),['word'=>$request->word]);
  
     }   
 }
