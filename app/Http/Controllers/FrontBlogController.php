@@ -253,13 +253,52 @@ class FrontBlogController extends Controller
           array_push($where_items,['comments.body','Like','%'.$item.'%']);
   }
   
+ 
+  if(empty($request->start_comment)==false)
+  {
+        $start_comment=$request->start_comment;
+  }
+        else
+    {
+        $start_comment='1901/01/01';
+  }
   
+    if(empty($request->end_comment)==false)
+  {
+        $end_comment=$request->end_comment;
+  }
+        else
+    {
+        $end_comment='9999/01/01';
+  }
 
+  if(empty($request->start_article)==false)
+  {
+        $start_article=$request->start_article;
+  }
+        else
+    {
+        $start_article='1901/01/01';
+  }
+  
+    if(empty($request->end_article)==false)
+  {
+        $end_article=$request->end_article;
+  }
+        else
+    {
+        $end_article='9999/01/01';
+  }
+          
         $list =Comment::selectRaw('comments.body as body,
                                     articles.id as article_id,
                                     articles.title as title,
                                     comments.updated_at as updated_at')
             ->join('articles','comments.article_id','=','articles.id')
+            ->whereDate('comments.updated_at','>=',$start_comment)
+            ->whereDate('comments.updated_at','<=',$end_comment)
+            ->whereDate('articles.updated_at','>=',$start_article)
+            ->whereDate('articles.updated_at','<=',$end_article)
             ->where($where_items)
            ->whereIn('articles.category_id',$checked_items)
             ->orderby('comments.id','desc')->paginate(self::NUM_PER_PAGE);
@@ -272,7 +311,10 @@ class FrontBlogController extends Controller
         
         $result=self::get_data_street_fighter_v();
         $name=$request->name;
-        return view('front_blog.commentList',compact('list','month_list','category_list','introduction','result','checked_items'),['word'=>$request->word]);
+        return view('front_blog.commentList',compact('list','month_list','category_list','introduction','result','checked_items'),
+        ['word'=>$request->word,
+        'start_comment'=>$request->start_comment,'end_comment'=>$request->end_comment,
+        'start_article'=>$request->start_article,'end_article'=>$request->end_article]);
  
     }   
 }

@@ -48,7 +48,7 @@ class FrontBlogRequest extends AdminBlogRequest//FormRequest
                'body' => 'required|string|max:10000',
             ];
 
-        
+
      return   Arr::get($rules, $action, []);
     }
     public function messages()
@@ -71,8 +71,7 @@ class FrontBlogRequest extends AdminBlogRequest//FormRequest
            'body.required'=>'本文は必須です',
             'body.string'=>'本文は文字列を入力してください',
              'body.max'=>'本文は:max文字以内で入力してください',
- 
-             
+
              
           ];
         

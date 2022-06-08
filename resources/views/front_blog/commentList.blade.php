@@ -7,7 +7,7 @@
           <div class="row" name="main">
             <div class="col-md-10 col-md-offset-1">
                 <h2><a href="{{ route('front_index') }}">eふぁいたーっす!</a></h2>
-                      @include('error')
+                        @include('error')          
             </div>
         </div>
 
@@ -31,7 +31,16 @@
         <input type="checkbox" name="id23" value="23" {{in_array(23,$checked_items) ? 'checked' : ''}}>格ゲーオフ会参加<br>
         <input type="checkbox" name="id24" value="24" {{in_array("word",$checked_items) ? 'checked' : ''}}>ブログ仕様<br>
         <br>
-        キーワード：<input type="text" name="word" value="{{$word}}"><br><br>
+        コメント投稿日
+        <br>
+        <input type="date" name="start_comment" value="{{$start_comment}}"> - <input type="date" name="end_comment" value="{{$end_comment}}"><br><br>
+        記事投稿日
+        <br>
+        <input type="date" name="start_article" value="{{$start_article}}"> - <input type="date" name="end_article" value="{{$end_article}}"><br><br>
+
+        キーワード
+        <br>
+        <input type="text" name="word" value="{{$word}}"><br><br>
         <input type="submit" name="submit" class="btn btn-primary" value="検索" />
     
         </form>
