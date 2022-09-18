@@ -28,8 +28,8 @@ class LoginController extends Controller
      *
      * @var string
      */
-//   protected $redirectTo = RouteServiceProvider::HOME;
-   protected $redirectTo = 'admin/list';
+   protected $redirectTo = RouteServiceProvider::HOME;
+//   protected $redirectTo = 'admin/list';
 
     /**
      * Create a new controller instance.
@@ -54,7 +54,17 @@ class LoginController extends Controller
         {
         return route('admin_introduction');
         
-     }
+         }
         //例）return 'costs/index';
+    }
+    
+        public function showLoginForm()
+    {
+        if (!session()->has('url.intended')) {
+
+            session(['url.intended' => url()->previous()]);
+
+        }
+        return view('auth.login');
     }
 }
