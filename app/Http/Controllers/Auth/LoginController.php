@@ -61,9 +61,14 @@ class LoginController extends Controller
         public function showLoginForm()
     {
         if (!session()->has('url.intended')) {
-
+            if(url()->previous()!='https://laravel-blog.paiza-user-basic.cloud/')
+            {
             session(['url.intended' => url()->previous()]);
-
+            }
+            else
+            {
+            session(['url.intended' => 'admin/list']);               
+            }
         }
         return view('auth.login');
     }
