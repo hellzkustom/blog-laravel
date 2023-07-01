@@ -75,6 +75,12 @@
         <br>
         <a href="{{ route('commentList') }}">ノート</a>
         @endif
+         @if(strcmp(url()->current(),route('drift_post'))!=0 )
+        <br>
+        <a href="{{ route('drift_post') }}">ドリフト~</a>
+        @endif       
+        
+        
         </div>
     </div>
    

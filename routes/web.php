@@ -41,6 +41,9 @@ Route::get('/dayily_post','TwitterController@dayily_post')->name('dayily_post');
 //ラウンジ募集
 Route::get('/sf5lounge','TwitterController@index')->name('sf5lounge');
 
+//ドリフト募集
+Route::get('/drift','TwitterController@drift_post')->name('drift_post');
+
 //AdminiBlogControllerは、ログイン認証あり
 Route::prefix('admin')->group(function(){
     //投稿

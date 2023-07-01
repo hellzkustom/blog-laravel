@@ -36,6 +36,7 @@ class TwitterController extends Controller
          return view('front_blog.dayily_post',['twitter' => $array,'introduction'=>$introduction,'result'=>$result,'month_list'=>$month_list,'category_list'=>$category_list]);
     }
     
+    
     //　Twitterのアカウント検索
     public function index(Request $request)
     {
@@ -78,8 +79,29 @@ class TwitterController extends Controller
     //    );
     
           }
-          
-         
+    public function drift_post(Request $request)
+    {
+                         $t = new CallTwitterApi();
+        $data = $t->serachTweets("hellzkustom 今日のドリフト",20);
+
+        $array = array();
+        $check=array();
+        foreach($data as $d) {
+        
+              $array[] = array($t->statusesOembed($d->id));
+
+        }
+        
+        $introduction =User::find(1);
+        
+
+       $month_list=FrontBlogController::getMonthList();
+        $category_list=FrontBlogController::getCatgoryList();
+        $result=FrontBlogController::get_data_street_fighter_v();
+            
+         return view('front_blog.drift_post',['twitter' => $array,'introduction'=>$introduction,'result'=>$result,'month_list'=>$month_list,'category_list'=>$category_list]);
+ 
+    }    
 }
 class callTwitterApi
 {
