@@ -53,8 +53,8 @@ class AdminBlogController extends Controller
         
         $category_list=[];
         $category_list=Category::getCategoryList()->toArray();//->pluck('name','id');        //$category_list=Category::orderBy('display_order','asc')->pluck('name','id');
-        
-        return view('admin_blog.form',compact('input','id','category_list','article'));
+        $character_list=['リリー(SF6)','ガイル(SF6)'];
+        return view('admin_blog.form',compact('input','id','category_list','article', 'character_list'));
 
 
 
@@ -106,14 +106,16 @@ class AdminBlogController extends Controller
     
         public function get_latest_lp(Request $request)
    {
-
+    
     $cnt=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
     ->where('lp','>',0)
+    ->where('character',$request->character)
     ->orderby('articles.post_date','desc')
     ->value('lp');
 
     return response()->json([
         'latest_lp'=>$cnt,
+        'character'=>$request->character,
         ]);
 
     }
@@ -136,6 +138,7 @@ class AdminBlogController extends Controller
     $cnt=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
     ->whereDate('articles.post_date','>=',$request->input('start_date'))
     ->whereDate('articles.post_date','<=',$request->input('end_date'))
+    ->where('street_fighter_vs.character',$request->character)
     ->selectRaw( 'SUM(battle_lounge) as battle_lounge,
                 SUM(battle_lounge_win) as battle_lounge_win,
                 SUM(rank_match) as rank_match,
@@ -151,12 +154,14 @@ class AdminBlogController extends Controller
      
     $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
     ->whereDate('articles.post_date','=',$request->input('start_date'))
+    ->where('street_fighter_vs.character',$request->character)
     ->value('lp');
     
     $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
     ->whereDate('articles.post_date','>=',$request->input('start_date'))
     ->whereDate('articles.post_date','<=',$request->input('end_date'))
     ->whereNotNull('lp')
+    ->where('street_fighter_vs.character',$request->character)
     ->latest('articles.post_date')->value('lp');
     
     //->whereDate('articles.post_date','=',$set_date)
@@ -170,7 +175,8 @@ class AdminBlogController extends Controller
         'casual_match'=>$cnt->casual_match,
         'casual_match_win'=>$cnt->casual_match_win,
         'lp_start'=>$lp_start,
-        'lp_end'=>$lp_end,            
+        'lp_end'=>$lp_end,       
+        'character'=>$request->character
         ]);
 
     }

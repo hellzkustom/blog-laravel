@@ -21,7 +21,7 @@ $(function () {
         
             start_date   :$('input[name=start_date]').val(),
             end_date     :$('input[name=end_date]').val(),
-            
+            character   :$('select[name=character]').val(),
         };
         return data;
     }    
@@ -49,6 +49,19 @@ class webApi_get_latest_lp
         }
             get_url(){
         return this.url;
+    }
+    
+    
+                        data()
+    {
+       
+            var data = {
+        
+            character   :$('select[name=character]').val(),
+        
+            
+        };
+        return data;
     }
     get_type(){
         return this.type;
@@ -102,6 +115,7 @@ class webApi_get_title_count
 }
 
 function get_latest_lp(){
+
             var obj = new webApi_get_latest_lp();
         ajax_action_get_lp(obj);
   //  $(this).text((new Date()).toLocaleString());
@@ -133,6 +147,12 @@ function set_title(){
         return;
     }
     
+    if(obj.data().character=="0")
+    {
+                alert("キャラクターを選択してください");
+        return;
+    }
+    
         // APIを呼び出してDBに保存
         $.ajax({
             headers: {
@@ -146,6 +166,7 @@ function set_title(){
         }).done(function(data, textStatus, jqXHR) {
         
         var msg="";
+        msg+=data["character"]+"\n";
         var rate;
             if(data["battle_lounge"]>0)
             {
@@ -173,10 +194,12 @@ function set_title(){
             msg+="総括:\n"
             msg+="現在のLP:"+data["lp_end"];
             if((data["lp_end"]-data["lp_start"])>0)
-            msg+=" 増減:+"+(data["lp_end"]-data["lp_start"]);
+                msg+=" 増減:+"+(data["lp_end"]-data["lp_start"])+"\n";
             else
             msg+=" 増減:"+(data["lp_end"]-data["lp_start"])+"\n";
+            
             msg+=" 期間:"+$('input[name=start_date]').val()+"~"+$('input[name=end_date]').val()+"\n";
+           
             $('textarea[name=body]').val(msg+$('textarea[name=body]').val());
             
         })
@@ -188,9 +211,12 @@ function set_title(){
     
     function ajax_action_get_lp(obj)
     {
-    
-    
-    
+        if(obj.data().character=="0")
+    {
+                alert("キャラクターを選択してください");
+        return;
+    }
+
         // APIを呼び出してDBに保存
         $.ajax({
             headers: {
@@ -199,10 +225,12 @@ function set_title(){
         
             type : obj.get_type(),
             url : obj.get_url(),
+            data:obj.data(),
             dataType: 'json',
         }).done(function(data, textStatus, jqXHR) {
         
         var msg="";
+        msg+=data["character"]+'\n';
         msg+="現在のLP:"+$('input[name=lp]').val();
             if(($('input[name=lp]').val()-data["latest_lp"]>0))
                     msg+=" LP増減:+"+($('input[name=lp]').val()-data["latest_lp"])+"\n";

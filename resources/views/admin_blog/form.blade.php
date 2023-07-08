@@ -77,6 +77,35 @@
         <div>
             
             <div>
+    キャラクター<br>
+
+     <select class="form_control" name="character" id="character">
+        <option value="0" selected>キャラクター選択してください</option>
+ 
+        @if(isset($article->street_fighter_v))
+              @foreach($character_list as $character)
+
+               @if($character== optional($article->street_fighter_v)->character)
+                  <option value="{{$character}}" selected>{{optional($article->street_fighter_v)->character}}</option>
+	           @else
+
+                  <option value="{{$character}}">{{$character}}</option>
+              @endif	           
+	           
+	       @endforeach 
+        @else
+            @foreach($character_list as $character)
+	               <option value="{{$character}}">{{$character}}</option>
+	       @endforeach
+        @endif
+        </select>
+        <br>
+        <br>
+        
+        
+        
+        
+        
         
                     @if(isset($article->street_fighter_v))
                         LP:<input class="number" type="number" name="lp" value="{{optional($article->street_fighter_v)->lp}}">

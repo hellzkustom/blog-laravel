@@ -42,7 +42,7 @@
         </div>
         <div class="panel-body">
         期間{{$result['start_date']}}-{{$result['end_date']}}<br>
-        現在のLP{{$result['lp_end']}} 増減{{$result['lp_end']-$result['lp_start']}}<br>
+        {{--現在のLP{{$result['lp_end']}} 増減{{$result['lp_end']-$result['lp_start']}}<br> --}}
         @if(isset($result['battle_lounge']))
         ラウンジ試合数{{$result['battle_lounge']}} 勝利数{{$result['battle_lounge_win']}}<br>
         @else
