@@ -157,12 +157,30 @@ class AdminBlogController extends Controller
     ->where('street_fighter_vs.character',$request->character)
     ->value('lp');
     
+    if(is_null($lp_start))
+    {
+    $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+    ->whereDate('articles.post_date','<',$request->input('start_date'))
+    ->where('street_fighter_vs.character',$request->character)
+        ->whereNotNull('lp')
+    ->latest('articles.post_date')->value('lp');    
+    }
+    
     $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
     ->whereDate('articles.post_date','>=',$request->input('start_date'))
     ->whereDate('articles.post_date','<=',$request->input('end_date'))
     ->whereNotNull('lp')
     ->where('street_fighter_vs.character',$request->character)
     ->latest('articles.post_date')->value('lp');
+    
+    if(is_null($lp_end))
+    {
+    $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+    ->whereDate('articles.post_date','<',$request->input('start_date'))
+    ->where('street_fighter_vs.character',$request->character)
+        ->whereNotNull('lp')
+    ->latest('articles.post_date')->value('lp');
+    }
     
     //->whereDate('articles.post_date','=',$set_date)
     //->value('lp');
