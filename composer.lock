@@ -4,32 +4,33 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4df406b7e4c708e5a68c06b1f494898d",
+    "content-hash": "c0c8f3acb03237fef2d18b0307e8a35b",
     "packages": [
         {
             "name": "abraham/twitteroauth",
-            "version": "2.0.1",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/abraham/twitteroauth.git",
-                "reference": "af6d0ba772731d4f83524fccb24281fe6149ef43"
+                "reference": "b9302599e416e5c00742cf7f4455220897f8291d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/af6d0ba772731d4f83524fccb24281fe6149ef43",
-                "reference": "af6d0ba772731d4f83524fccb24281fe6149ef43",
+                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/b9302599e416e5c00742cf7f4455220897f8291d",
+                "reference": "b9302599e416e5c00742cf7f4455220897f8291d",
                 "shasum": ""
             },
             "require": {
                 "composer/ca-bundle": "^1.2",
                 "ext-curl": "*",
-                "php": "^7.3 || ^7.4 || ^8.0"
+                "php": "^7.4 || ^8.0 || ^8.1"
             },
             "require-dev": {
                 "php-vcr/php-vcr": "^1",
                 "php-vcr/phpunit-testlistener-vcr": "dev-php-8",
                 "phpmd/phpmd": "^2",
-                "phpunit/phpunit": "^8",
+                "phpunit/phpunit": "^8 || ^9",
+                "rector/rector": "^0.12.19 || ^0.13.0",
                 "squizlabs/php_codesniffer": "^3"
             },
             "type": "library",
@@ -65,7 +66,7 @@
                 "issues": "https://github.com/abraham/twitteroauth/issues",
                 "source": "https://github.com/abraham/twitteroauth"
             },
-            "time": "2020-12-02T01:37:06+00:00"
+            "time": "2022-08-18T23:30:33+00:00"
         },
         {
             "name": "asm89/stack-cors",

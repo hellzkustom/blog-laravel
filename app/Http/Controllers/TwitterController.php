@@ -20,11 +20,11 @@ class TwitterController extends Controller
 
         $array = array();
         $check=array();
-        foreach($data as $d) {
+   //     foreach($data as $d) {
         
-              $array[] = array($t->statusesOembed($d->id));
+       //       $array[] = array($t->statusesOembed($d->id));
 
-        }
+    //    }
         
         $introduction =User::find(1);
         
@@ -46,11 +46,11 @@ class TwitterController extends Controller
 
         $array = array();
         $check=array();
-        foreach($data as $d) {
+      //  foreach($data as $d) {
         
-              $array[] = array($t->statusesOembed($d->id));
+        //      $array[] = array($t->statusesOembed($d->id));
 
-        }
+//        }
         
         $introduction =User::find(1);
         
@@ -86,11 +86,11 @@ class TwitterController extends Controller
 
         $array = array();
         $check=array();
-        foreach($data as $d) {
+        //foreach($data as $d) {
         
-              $array[] = array($t->statusesOembed($d->id));
+          //    $array[] = array($t->statusesOembed($d->id));
 
-        }
+    //    }
         
         $introduction =User::find(1);
         
@@ -102,6 +102,18 @@ class TwitterController extends Controller
          return view('front_blog.drift_post',['twitter' => $array,'introduction'=>$introduction,'result'=>$result,'month_list'=>$month_list,'category_list'=>$category_list]);
  
     }    
+    
+    public function tweet(Request $request)
+    {
+                             $t = new CallTwitterApi();
+        $data = $t->tweet("hellzkustom");
+        
+        var_dump($data);
+    return response()->json([
+        'result'=>'OK',
+        ]);
+    }
+    
 }
 class callTwitterApi
 {
@@ -120,21 +132,34 @@ class callTwitterApi
                                     config('twitter.twitter-token'),
                                     config('twitter.twitter-token-secret')
                                     ); 
+                                    
+                                    $this->t->setApiVersion('2');
 
+    }
+    
+    
+    public function tweet(string $word)
+    {
+    
+    $d = $this->t->post("tweets", ["text" => "API v2のテスト".date('l jS \of F Y h:i:s A')], true);
+
+            return $d;
     }
     
     // 投稿検索
     public function serachTweets(String $searchWord, Int $cnt)
     {
-
-                $d = $this->t->get("search/tweets", [
-                'q' => $searchWord,
+ //$d = $this->t->post("tweets", ["text" => "API v2のテスト".date('l jS \of F Y h:i:s A')], true);
+                $d = $this->t->get("tweets/search/recent", [
+                'query' => $searchWord,
                 'count' => $cnt,
-                'result_type'=>'recent'
-             ]);
+                 'result_type'=>'recent'
+                 ]);
 
-         
-        return $d->statuses;
+         var_dump($d);
+        return $d->data;
+    
+    return null;
     }
     
     //oEmbed互換形式で取得

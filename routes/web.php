@@ -44,6 +44,9 @@ Route::get('/sf5lounge','TwitterController@index')->name('sf5lounge');
 //ドリフト募集
 Route::get('/drift','TwitterController@drift_post')->name('drift_post');
 
+//ツイート
+Route::get('/tweet','TwitterController@tweet')->name('tweet');
+
 //AdminiBlogControllerは、ログイン認証あり
 Route::prefix('admin')->group(function(){
     //投稿

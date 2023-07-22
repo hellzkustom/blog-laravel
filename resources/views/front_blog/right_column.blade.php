@@ -58,9 +58,9 @@
         @else
         カジュアル試合なし<br>
         @endif
-        @if(strcmp(url()->current(),route('dayily_post'))!=0 )
+      {{--  @if(strcmp(url()->current(),route('dayily_post'))!=0 )
         <a href="{{ route('dayily_post') }}">トレモ風景～</a>
-        @endif
+        @endif --}}
         </div>
         
     </div>
@@ -70,15 +70,15 @@
             <h3 class="panel-title">リンク</h3>
         </div>
         <div class="panel-body">
-        <a href="{{ route('sf5lounge') }}">SF5ラウンジ募集</a>
+      {{--  <a href="{{ route('sf5lounge') }}">SF5ラウンジ募集</a> --}}
         @if(strcmp(url()->current(),route('commentList'))!=0 )
         <br>
         <a href="{{ route('commentList') }}">ノート</a>
         @endif
-         @if(strcmp(url()->current(),route('drift_post'))!=0 )
+       {{--  @if(strcmp(url()->current(),route('drift_post'))!=0 )
         <br>
         <a href="{{ route('drift_post') }}">ドリフト~</a>
-        @endif       
+        @endif        --}}
         
         
         </div>
