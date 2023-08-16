@@ -61,7 +61,7 @@
                 @empty
                     <p>コメントがありません</p>
                 @endforelse
-            {{ $list->links() }}
+            {{ $list->appends(request()->query())->links() }}
             </div>
             @include('front_blog.right_column')
             </div>
