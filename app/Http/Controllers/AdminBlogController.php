@@ -53,7 +53,7 @@ class AdminBlogController extends Controller
         
         $category_list=[];
         $category_list=Category::getCategoryList()->toArray();//->pluck('name','id');        //$category_list=Category::orderBy('display_order','asc')->pluck('name','id');
-        $character_list=['リリー(SF6)','ガイル(SF6)','A.K.I.(SF6)'];
+        $character_list=['リリー(SF6)','ガイル(SF6)','ED(SF6)'];
         return view('admin_blog.form',compact('input','id','category_list','article', 'character_list'));
 
 
