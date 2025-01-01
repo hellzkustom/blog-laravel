@@ -38,33 +38,55 @@
 @else  
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">成績</h3>
+            <h3 class="panel-title">直近の成績</h3>
         </div>
-        <div class="panel-body">
-        期間{{$result['start_date']}}-{{$result['end_date']}}<br>
-        {{--現在のLP{{$result['lp_end']}} 増減{{$result['lp_end']-$result['lp_start']}}<br> --}}
-        @if(isset($result['battle_lounge']))
-        ラウンジ試合数{{$result['battle_lounge']}} 勝利数{{$result['battle_lounge_win']}}<br>
-        @else
-        ラウンジ試合なし<br>
-        @endif
-        @if(isset($result['rank_match']))
-        ランクマ試合数{{$result['rank_match']}} 勝利数{{$result['rank_match_win']}}<br>
-        @else
-        ランクマ試合なし<br>
-        @endif
-        @if(isset($result['casual_match']))
-        カジュアル試合数{{$result['casual_match']}} 勝利数{{$result['casual_match_win']}}<br>
-        @else
-        カジュアル試合なし<br>
-        @endif
-      {{--  @if(strcmp(url()->current(),route('dayily_post'))!=0 )
-        <a href="{{ route('dayily_post') }}">トレモ風景～</a>
-        @endif --}}
+            <div class="panel-body">
+                @if(count($results)>0)
+                    @foreach($results as $result)
+                        {{$result['character']}}<br>        
+                        期間{{$result['start_date']}}-{{$result['end_date']}}<br>
+                        現在のLP{{$result['lp_end']}} 増減{{$result['lp_end']-$result['lp_start']}}<br>
+                            @if(isset($result['battle_lounge']))
+                                ラウンジ試合数{{$result['battle_lounge']}} 勝利数{{$result['battle_lounge_win']}}<br>
+                            @else
+                                ラウンジ試合なし<br>
+                            @endif
+                            @if(isset($result['rank_match']))
+                                ランクマ試合数{{$result['rank_match']}} 勝利数{{$result['rank_match_win']}}<br>
+                            @else
+                                ランクマ試合なし<br>
+                            @endif
+                            @if(isset($result['casual_match']))
+                                カジュアル試合数{{$result['casual_match']}} 勝利数{{$result['casual_match_win']}}<br>
+                            @else
+                                カジュアル試合なし<br>
+                            @endif
+                            <br>
+                    @endforeach
+                @else
+                    対戦なし<br>
+                @endif
+        
+                 {{--  @if(strcmp(url()->current(),route('dayily_post'))!=0 )
+                    <a href="{{ route('dayily_post') }}">トレモ風景～</a>
+                    @endif --}}
         </div>
         
     </div>
-    
+<div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">ランク状況</h3>
+        </div>
+            <div class="panel-body">
+                @if(count($ranks)>0)
+                    @foreach($ranks as $rank)
+                        {{$rank['character']}} LP{{$rank['lp_end']}}  {{$rank['rank']}} <br>
+                    @endforeach
+                @else
+                    対戦なし<br>
+                @endif
+        </div>
+    </div>
      <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">リンク</h3>

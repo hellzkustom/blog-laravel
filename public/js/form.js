@@ -149,8 +149,8 @@ function set_title(){
     
     if(obj.data().character=="0")
     {
-                alert("キャラクターを選択してください");
-        return;
+            //    alert("キャラクターを選択してください");
+        //return;
     }
     
         // APIを呼び出してDBに保存
@@ -165,43 +165,46 @@ function set_title(){
             dataType: 'json',
         }).done(function(data, textStatus, jqXHR) {
         
+      
+        
+        data.forEach(function(value){
         var msg="";
-        msg+=data["character"]+"\n";
+        msg+=value["character"]+"\n";
         var rate;
-            if(data["battle_lounge"]>0)
+            if(value["battle_lounge"]>0)
             {
-                rate=data["battle_lounge_win"]/data["battle_lounge"];
-                msg+="ラウンジ試合数:"+data["battle_lounge"]+" 勝利数:"+data["battle_lounge_win"]+" 勝率:"+String(rate).substr(0,5)+"\n";
+                rate=value["battle_lounge_win"]/value["battle_lounge"];
+                msg+="ラウンジ試合数:"+value["battle_lounge"]+" 勝利数:"+value["battle_lounge_win"]+" 勝率:"+String(rate).substr(0,5)+"\n";
             //    $('input[name=battle_lounge]').val(data["battle_lounge"]);
             //    $('input[name=battle_lounge_win]').val(data["battle_lounge_win"]);
             }
-            if(data["rank_match"]>0)
+            if(value["rank_match"]>0)
             {
-                rate=data["rank_match_win"]/data["rank_match"];
-                msg+="ランクマ試合数:"+data["rank_match"]+" 勝利数:"+data["rank_match_win"]+" 勝率:"+String(rate).substr(0,5)+"\n";
+                rate=value["rank_match_win"]/value["rank_match"];
+                msg+="ランクマ試合数:"+value["rank_match"]+" 勝利数:"+value["rank_match_win"]+" 勝率:"+String(rate).substr(0,5)+"\n";
             
             //$('input[name=rank_match]').val(data["rank_match"]);
             }
-            if(data["casual_match"]>0)
+            if(value["casual_match"]>0)
             {            
-               rate=data["casual_match_win"]/data["casual_match"];
-                msg+="カジュ"+"アル試合数:"+data["casual_match"]+" 勝利数:"+data["casual_match_win"]+" 勝率:"+String(rate).substr(0,5)+"\n";
+               rate=value["casual_match_win"]/value["casual_match"];
+                msg+="カジュ"+"アル試合数:"+value["casual_match"]+" 勝利数:"+value["casual_match_win"]+" 勝率:"+String(rate).substr(0,5)+"\n";
             
             //$('input[name=casual_match]').val(data["casual_match"]);
             //$('input[name=casual_match_win]').val(data["casual_match_win"]);
             
             }
             msg+="総括:\n"
-            msg+="現在のLP:"+data["lp_end"];
-            if((data["lp_end"]-data["lp_start"])>0)
-                msg+=" 増減:+"+(data["lp_end"]-data["lp_start"])+"\n";
+            msg+="現在のLP:"+value["lp_end"];
+            if((value["lp_end"]-value["lp_start"])>0)
+                msg+=" 増減:+"+(value["lp_end"]-value["lp_start"])+"\n";
             else
-            msg+=" 増減:"+(data["lp_end"]-data["lp_start"])+"\n";
+            msg+=" 増減:"+(value["lp_end"]-value["lp_start"])+"\n";
             
-            msg+=" 期間:"+$('input[name=start_date]').val()+"~"+$('input[name=end_date]').val()+"\n";
-           
+            msg+="期間:"+$('input[name=start_date]').val()+"~"+$('input[name=end_date]').val()+"\n\n";
+ 
             $('textarea[name=body]').val(msg+$('textarea[name=body]').val());
-            
+         });             
         })
 　　.fail(function(xhr, textStatus, errorThrown) {
         alert(xhr.status);

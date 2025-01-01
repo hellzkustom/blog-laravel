@@ -122,7 +122,9 @@ class webApi_comment_edit extends webApi{
      $('#category_delete').on('click', category_delete_action);
      
     $('#comment_submit').on('click', comment_edit_action);
-    $('#img_submit').on('click', img_post_action);
+    
+    
+    //$('#img_submit').on('click', img_post_action);
 
 
     // 保存ボタン押下時

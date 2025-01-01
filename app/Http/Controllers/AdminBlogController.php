@@ -49,11 +49,11 @@ class AdminBlogController extends Controller
         }
         
         $input=array_merge($input,old());
-        
+        $character_list=['リリー(SF6)','ガイル(SF6)','ED(SF6)'];
         
         $category_list=[];
         $category_list=Category::getCategoryList()->toArray();//->pluck('name','id');        //$category_list=Category::orderBy('display_order','asc')->pluck('name','id');
-        $character_list=['リリー(SF6)','ガイル(SF6)','ED(SF6)'];
+        
         return view('admin_blog.form',compact('input','id','category_list','article', 'character_list'));
 
 
@@ -132,71 +132,154 @@ class AdminBlogController extends Controller
 
     }
     
-
     public function get_data_street_fighter_v(Request $request)
     {
-    $cnt=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
-    ->whereDate('articles.post_date','>=',$request->input('start_date'))
-    ->whereDate('articles.post_date','<=',$request->input('end_date'))
-    ->where('street_fighter_vs.character',$request->character)
-    ->selectRaw( 'SUM(battle_lounge) as battle_lounge,
+   $datas = [];
+       if(is_null($request->character) or $request->character=="0")
+       {
+            $cnt=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+            ->whereDate('articles.post_date','>=',$request->input('start_date'))
+            ->whereDate('articles.post_date','<=',$request->input('end_date'))
+            ->selectRaw( 'street_fighter_vs.character as playing,
+                SUM(battle_lounge) as battle_lounge,
                 SUM(battle_lounge_win) as battle_lounge_win,
                 SUM(rank_match) as rank_match,
                 SUM(rank_match_win) as rank_match_win,
                 SUM(casual_match) as casual_match,
                 SUM(casual_match_win) as casual_match_win'
-                )->first();//->sum('battle_lounge');
-   
- //   $cnt_battle_lounge_win=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
- //   ->whereDate('articles.post_date','>=',$request->input('start_date'))
- //   ->whereDate('articles.post_date','<=',$request->input('end_date'))
- //   ->sum('battle_lounge_win');
-     
-    $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
-    ->whereDate('articles.post_date','=',$request->input('start_date'))
-    ->where('street_fighter_vs.character',$request->character)
-    ->value('lp');
-    
-    if(is_null($lp_start))
-    {
-    $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
-    ->whereDate('articles.post_date','<',$request->input('start_date'))
-    ->where('street_fighter_vs.character',$request->character)
-        ->whereNotNull('lp')
-    ->latest('articles.post_date')->value('lp');    
-    }
-    
-    $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
-    ->whereDate('articles.post_date','>=',$request->input('start_date'))
-    ->whereDate('articles.post_date','<=',$request->input('end_date'))
-    ->whereNotNull('lp')
-    ->where('street_fighter_vs.character',$request->character)
-    ->latest('articles.post_date')->value('lp');
-    
-    if(is_null($lp_end))
-    {
-    $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
-    ->whereDate('articles.post_date','<',$request->input('start_date'))
-    ->where('street_fighter_vs.character',$request->character)
-        ->whereNotNull('lp')
-    ->latest('articles.post_date')->value('lp');
-    }
-    
-    //->whereDate('articles.post_date','=',$set_date)
-    //->value('lp');
-    
-    return response()->json([
-        'battle_lounge'=>$cnt->battle_lounge,
-        'battle_lounge_win'=>$cnt->battle_lounge_win,
-        'rank_match'=>$cnt->rank_match,
-        'rank_match_win'=>$cnt->rank_match_win,
-        'casual_match'=>$cnt->casual_match,
-        'casual_match_win'=>$cnt->casual_match_win,
-        'lp_start'=>$lp_start,
-        'lp_end'=>$lp_end,       
-        'character'=>$request->character
-        ]);
-
+                )->groupBy('playing')->get();
+            
+            foreach ($cnt as $cnt_part)
+            {
+                $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                ->whereDate('articles.post_date','=',$request->input('start_date'))
+                ->where('street_fighter_vs.character',$request->playing)
+                ->value('lp');
+        
+                if(is_null($lp_start))
+                {
+                    $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                    ->whereDate('articles.post_date','<',$request->input('start_date'))
+                    ->where('street_fighter_vs.character',$cnt_part->playing)
+                    ->whereNotNull('lp')
+                    ->latest('articles.post_date')->value('lp');    
+                }
+        
+                $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                ->whereDate('articles.post_date','>=',$request->input('start_date'))
+                ->whereDate('articles.post_date','<=',$request->input('end_date'))
+                ->where('street_fighter_vs.character',$cnt_part->playing)
+                ->whereNotNull('lp')
+                ->latest('articles.post_date')->value('lp');
+        
+                if(is_null($lp_end))
+                {
+                    $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                    ->whereDate('articles.post_date','<',$request->input('start_date'))
+                    ->where('street_fighter_vs.character',$cnt_part->playing)
+                    ->whereNotNull('lp')
+                    ->latest('articles.post_date')->value('lp');
+                }
+                
+            $datas[]=[
+                'character'=>$cnt_part->playing,   
+                'battle_lounge'=>$cnt_part->battle_lounge,
+                'battle_lounge_win'=>$cnt_part->battle_lounge_win,
+                'rank_match'=>$cnt_part->rank_match,
+                'rank_match_win'=>$cnt_part->rank_match_win,
+                'casual_match'=>$cnt_part->casual_match,
+                'casual_match_win'=>$cnt_part->casual_match_win,                
+                'lp_start'=>$lp_start,
+                'lp_end'=>$lp_end     
+        ];
+        
+            }
+        
+        
+        
+        return response()->json($datas);
+      //   https://laravel-blog.paiza-user-basic.cloud/admin/post/get_data_street_fighter_v?start_date=2024/1/1&end_date=2024/12/31   
+        
+        
+        // return response()->json([
+        //    'battle_lounge'=>$cnt->battle_lounge,
+         //   'battle_lounge_win'=>$cnt->battle_lounge_win,
+         //   'rank_match'=>$cnt->rank_match,
+         //   'rank_match_win'=>$cnt->rank_match_win,
+         //   'casual_match'=>$cnt->casual_match,
+         //   'casual_match_win'=>$cnt->casual_match_win,
+         //   'lp_start'=>$lp_start,
+          //  'lp_end'=>$lp_end,       
+        //    'character'=>$cnt->character
+        //]);
+   }
+   else
+   {
+        $cnt=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+        ->whereDate('articles.post_date','>=',$request->input('start_date'))
+        ->whereDate('articles.post_date','<=',$request->input('end_date'))
+        ->where('street_fighter_vs.character',$request->character)
+        ->selectRaw( 'SUM(battle_lounge) as battle_lounge,
+                    SUM(battle_lounge_win) as battle_lounge_win,
+                    SUM(rank_match) as rank_match,
+                    SUM(rank_match_win) as rank_match_win,
+                    SUM(casual_match) as casual_match,
+                    SUM(casual_match_win) as casual_match_win'
+                    )->first();//->sum('battle_lounge');
+                    
+                    
+        $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+        ->whereDate('articles.post_date','=',$request->input('start_date'))
+        ->where('street_fighter_vs.character',$request->character)
+        ->value('lp');
+        
+        if(is_null($lp_start))
+        {
+            $lp_start=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+            ->whereDate('articles.post_date','<',$request->input('start_date'))
+            ->where('street_fighter_vs.character',$request->character)
+                ->whereNotNull('lp')
+            ->latest('articles.post_date')->value('lp');    
+        }
+        
+        $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+            ->whereDate('articles.post_date','>=',$request->input('start_date'))
+            ->whereDate('articles.post_date','<=',$request->input('end_date'))
+            ->whereNotNull('lp')
+            ->where('street_fighter_vs.character',$request->character)
+            ->latest('articles.post_date')->value('lp');
+        
+        if(is_null($lp_end))
+        {
+            $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+            ->whereDate('articles.post_date','<',$request->input('start_date'))
+            ->where('street_fighter_vs.character',$request->character)
+                ->whereNotNull('lp')
+            ->latest('articles.post_date')->value('lp');
+        }
+        
+        $framework[]=[
+            'battle_lounge'=>$cnt->battle_lounge,
+            'battle_lounge_win'=>$cnt->battle_lounge_win,
+            'rank_match'=>$cnt->rank_match,
+            'rank_match_win'=>$cnt->rank_match_win,
+            'casual_match'=>$cnt->casual_match,
+            'casual_match_win'=>$cnt->casual_match_win,
+            'lp_start'=>$lp_start,
+            'lp_end'=>$lp_end,       
+            'character'=>$request->character];
+            return response()->json($framework);//[
+ //           'battle_lounge'=>$cnt->battle_lounge,
+ //           'battle_lounge_win'=>$cnt->battle_lounge_win,
+ //           'rank_match'=>$cnt->rank_match,
+ //           'rank_match_win'=>$cnt->rank_match_win,
+ //           'casual_match'=>$cnt->casual_match,
+ //           'casual_match_win'=>$cnt->casual_match_win,
+ //           'lp_start'=>$lp_start,
+ //           'lp_end'=>$lp_end,       
+ //           'character'=>$request->character
+//        ]);
+       }
     }
         public function delete(AdminBlogRequest $request)
     {
