@@ -47,6 +47,12 @@ Route::get('/drift','TwitterController@drift_post')->name('drift_post');
 //ツイート
 Route::get('/tweet','TwitterController@tweet')->name('tweet');
 
+Route::get('/result','FrontBlogController@result')->name('result');
+
+
+//ストリートファイターオンライン対戦結果集計
+Route::get('/get_data_result','FrontBlogController@get_data_result')->name('admin_get_data_street_fighter_v');
+
 //AdminiBlogControllerは、ログイン認証あり
 Route::prefix('admin')->group(function(){
     //投稿
@@ -56,7 +62,7 @@ Route::prefix('admin')->group(function(){
     //投稿イメージ送信
     Route::post('post/image','AdminBlogController@postArticleImg')->name('admin_post_article_img');
     //ストリートファイターV結果集計
-    Route::get('post/get_data_street_fighter_v','AdminBlogController@get_data_street_fighter_v')->name('admin_get_data_street_fighter_v');
+    //Route::get('post/get_data_street_fighter_v','AdminBlogController@get_data_street_fighter_v')->name('admin_get_data_street_fighter_v');
     //最新LP取得
     Route::get('post/get_latest_lp','AdminBlogController@get_latest_lp')->name('admin_get_latest_lp');
     //カテゴリカウント

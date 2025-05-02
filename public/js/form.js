@@ -9,7 +9,7 @@ $(function () {
        constructor( type, url,ok_mesg ) {
        
        this.type='GET';
-       this.url='https://laravel-blog.paiza-user-basic.cloud/admin/post/get_data_street_fighter_v';//'post/get_data_street_fighter_v';
+       this.url='https://laravel-blog.paiza-user-basic.cloud/get_data_result';//'post/get_data_street_fighter_v';
        this.ok_msg='<span>正常に処理が完了しました</span>';
 
        

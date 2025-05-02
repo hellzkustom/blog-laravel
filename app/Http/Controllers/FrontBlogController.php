@@ -56,11 +56,225 @@ class FrontBlogController extends Controller
         return view('front_blog.index',compact('list','month_list','category_list','introduction','results','ranks'));
     }
     
+    
+    public function result()
+    {
+        //キャラクターの取得
+        $cnt=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+        ->selectRaw( 'street_fighter_vs.character as playing')->groupBy('playing')->get();
+        $datas = [];
+            
+        $rank_data=config('sf6.rank_data');//[25000,19000,13000,9000,5000,3000,1000];
+        $star_width=config('sf6.star_width');//[1200,800,400,200];
+        $rank_status=config('sf6.rank');            
+            
+        foreach ($cnt as $cnt_part)
+        {
+
+             $end_date= new DateTime(Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                        ->max('articles.post_date'));
+   
+                 if ($cnt_part->playing!='')
+                {
+                    //現在のLPを取得
+                    $lp_end=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                            ->whereDate('articles.post_date','<=',$end_date)
+                            ->where('street_fighter_vs.character',$cnt_part->playing)
+                            ->whereNotNull('lp')
+                            ->latest('articles.post_date')->value('lp');                  
+                    
+                    //ランクマ開始日
+                    $first_date=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                            ->where([
+                                        ['street_fighter_vs.character','=',$cnt_part->playing],
+                                        ['category_id','=','17'],
+                                    ])
+                            ->whereNotNull('lp')
+                            ->min('articles.post_date');
+                
+                    $first_lp=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                            ->where([
+                                        ['articles.post_date','=',$first_date],
+                                    ])
+                            ->get(['lp'])[0]->lp;
+                            
+                    $length=count($rank_data);
+                    
+                    for($i=0;$i<$length-1;$i++)
+                    {   
+                        if ( $rank_data[$i]  > $first_lp)
+                        {
+                            if($lp_end>=$rank_data[$i]  )
+                            {
+                                array_push($datas,
+                                self::get_data_detail_old($rank_data[$i],
+                                $rank_data[$i+1],
+                                $cnt_part,$first_date,$rank_status[$i+1])
+                                );
+                            }
+                            else
+                            {
+                                if($lp_end>=$rank_data[$i+1] )
+                                {
+                                    array_push($datas,
+                                    self::get_data_detail_now($rank_data[$i+1],$cnt_part,$first_date,$rank_status[$i+1],$end_date)
+                                      );
+                                      $data=[
+                                        'character'=>$cnt_part->playing,
+                                        'rank'=>"",
+                                        'start_date'=>"",
+                                        'lank_up_date'=>"",
+                                        'match'=>"",
+                                        'match_win'=>"",
+                                        'rate'=>""//round($win['rank_match_win']/$win['rank_match'],3)
+                                    ];
+                                   //array_push($datas,$data);
+                                                                 
+                                }
+                            }
+                        }
+                    }   
+               
+                }
+        }
+     
+        $character_list=config('sf6.character_list');
+        return view('front_blog.result',compact('character_list','datas'));
+    
+    }
+    
+    public function get_data_detail_now($rank,$cnt_part,$first_date,$rank_name,$end_date)
+    {
+        //ランクアップ後初めての対戦日
+        $temp_date=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                    ->where([
+                        ['street_fighter_vs.character','=',$cnt_part->playing],
+                        ['lp','>=',$rank],
+                        ['rank_match','>','0'],
+                        ['category_id','=','17']
+                        ])
+                    ->whereNotNull('lp')
+                    ->orderby('articles.post_date')->get(['articles.post_date']);//[1]->post_date;
+
+        if(count($temp_date)>0)
+        {
+          if($temp_date[0]->post_date==$first_date )
+          {
+              $start_date=$first_date;
+          }
+          else
+          {
+             if (count($temp_date)>1)
+             {
+                 $start_date=$temp_date[1]->post_date;
+             }
+             else
+             {
+                 $start_date="";
+             }
+          }
+        }
+        
+        if($start_date=="")
+        {
+            $start_date="";
+            $win=[
+                'rank_match'=>"",
+                'rank_match_win'=>""
+                ];
+            $rate="";
+        
+        }
+        else
+        {
+            
+            $win=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                ->where('street_fighter_vs.character','=',$cnt_part->playing)
+                ->whereDate('articles.post_date','>=',$start_date)
+                ->whereDate('articles.post_date','<=',$end_date)
+                ->selectRaw('street_fighter_vs.character as playing,
+                SUM(rank_match) as rank_match,
+                SUM(rank_match_win) as rank_match_win'
+                )->groupBy('playing')->get()[0];//->sum('battle_lounge');
+
+            $rate=round($win['rank_match_win']/$win['rank_match'],3);
+        }
+        
+        return [
+            'character'=>$cnt_part->playing,
+            'rank'=>$rank_name,
+            'start_date'=>$start_date,
+            'lank_up_date'=>"",
+            'match'=>$win['rank_match'],
+            'match_win'=>$win['rank_match_win'],
+            'rate'=>$rate
+            ];
+            
+    }
+    public function get_data_detail_old($rank,$pre_rank,$cnt_part,$first_date,$rank_name)
+    {
+        
+        //ランクアップ日
+        $end_date=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                ->where([
+                    ['street_fighter_vs.character','=',$cnt_part->playing],
+                    ['lp','>=',$rank],
+                     ['category_id','=','17']
+                    ])
+                ->whereNotNull('lp')
+                ->orderby('articles.post_date')->pluck('articles.post_date')->first();
+        
+        //ランクアップ後初めての対戦日
+        $temp_date=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+                ->where([
+                    ['street_fighter_vs.character','=',$cnt_part->playing],
+                    ['lp','>=',$pre_rank],
+                     ['rank_match','>','0'],
+                    ['category_id','=','17']
+                    ])
+                ->whereNotNull('lp')
+                ->orderby('articles.post_date')->get(['articles.post_date']);//[1]->post_date;
+      
+
+          if($temp_date[0]->post_date==$first_date )
+          {
+              $start_date=$first_date;
+          }
+          else
+          {
+             $start_date=$temp_date[1]->post_date;
+          }
+      
+        $win=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
+            ->where('street_fighter_vs.character','=',$cnt_part->playing)
+            ->whereDate('articles.post_date','>=',$start_date)
+            ->whereDate('articles.post_date','<=',$end_date)
+            ->selectRaw('street_fighter_vs.character as playing,
+                        SUM(rank_match) as rank_match,
+                        SUM(rank_match_win) as rank_match_win'
+            )->groupBy('playing')->get()[0];//->sum('battle_lounge');
+        
+        return [
+            'character'=>$cnt_part->playing,
+            'rank'=>$rank_name,
+            'start_date'=>$start_date,
+            'lank_up_date'=>$end_date,
+            'match'=>$win['rank_match'],
+            'match_win'=>$win['rank_match_win'],
+            'rate'=>round($win['rank_match_win']/$win['rank_match'],3)
+            ];
+    }
+    
+    public function  get_data_result(Request $request) 
+    {
+        return AdminBlogController::get_data_street_fighter_v($request);
+    }
+    
         public function get_rank_street_fighter_vi()
     {
          $datas = [];
-         $rank_data=[25000,19000,13000,9000,5000,3000,1000];
-         $star_width=[1200,800,400,200];
+         $rank_data=config('sf6.rank_data');//[25000,19000,13000,9000,5000,3000,1000];
+         $star_width=config('sf6.star_width');//[1200,800,400,200];
          $end_date= new DateTime(Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
         ->max('articles.post_date'));
         

@@ -46,11 +46,6 @@
                         {{$result['character']}}<br>        
                         期間{{$result['start_date']}}-{{$result['end_date']}}<br>
                         現在のLP{{$result['lp_end']}} 増減{{$result['lp_end']-$result['lp_start']}}<br>
-                            @if(isset($result['battle_lounge']))
-                                ラウンジ試合数{{$result['battle_lounge']}} 勝利数{{$result['battle_lounge_win']}}<br>
-                            @else
-                                ラウンジ試合なし<br>
-                            @endif
                             @if(isset($result['rank_match']))
                                 ランクマ試合数{{$result['rank_match']}} 勝利数{{$result['rank_match_win']}}<br>
                             @else
@@ -61,6 +56,11 @@
                             @else
                                 カジュアル試合なし<br>
                             @endif
+                            {{-- @if(isset($result['battle_lounge']))
+                                ラウンジ試合数{{$result['battle_lounge']}} 勝利数{{$result['battle_lounge_win']}}<br>
+                            @else
+                                ラウンジ試合なし<br>
+                            @endif --}}
                             <br>
                     @endforeach
                 @else
@@ -94,16 +94,22 @@
         <div class="panel-body">
       {{--  <a href="{{ route('sf5lounge') }}">SF5ラウンジ募集</a> --}}
         @if(strcmp(url()->current(),route('commentList'))!=0 )
-        <br>
         <a href="{{ route('commentList') }}">ノート</a>
         @endif
        {{--  @if(strcmp(url()->current(),route('drift_post'))!=0 )
-        <br>
         <a href="{{ route('drift_post') }}">ドリフト~</a>
         @endif        --}}
-        
-        
+        <br>
+         <a href="https://sf6.halipe.co/myrank/2634206553">LP推移</a>
+         
+          @if(strcmp(url()->current(),route('result'))!=0 )
+        <br>
+        <a href="{{ route('result') }}">戦績詳細</a>
+        @endif               
+         
+         
         </div>
+        
     </div>
    
        <div class="panel panel-default">

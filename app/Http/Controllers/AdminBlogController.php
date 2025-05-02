@@ -49,7 +49,7 @@ class AdminBlogController extends Controller
         }
         
         $input=array_merge($input,old());
-        $character_list=['リリー(SF6)','ガイル(SF6)','ED(SF6)'];
+        $character_list=config('sf6.character_list');//['リリー(SF6)','ガイル(SF6)','ED(SF6)'];
         
         $category_list=[];
         $category_list=Category::getCategoryList()->toArray();//->pluck('name','id');        //$category_list=Category::orderBy('display_order','asc')->pluck('name','id');
@@ -132,7 +132,7 @@ class AdminBlogController extends Controller
 
     }
     
-    public function get_data_street_fighter_v(Request $request)
+    public static function get_data_street_fighter_v(Request $request)
     {
    $datas = [];
        if(is_null($request->character) or $request->character=="0")
@@ -436,10 +436,4 @@ Image::create(['name' => $img,'user_id'=>$request->user_id,'article_id'=>$reques
    
    return redirect()->route('admin_introduction')->with('message','プロフィール画像に設定しました');
     }
-    
-    
-
-
-
-    
 }
