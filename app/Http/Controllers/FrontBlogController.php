@@ -81,7 +81,8 @@ class FrontBlogController extends Controller
                             ->whereDate('articles.post_date','<=',$end_date)
                             ->where('street_fighter_vs.character',$cnt_part->playing)
                             ->whereNotNull('lp')
-                            ->latest('articles.post_date')->value('lp');                  
+                            ->max('lp');
+                            //->latest('articles.post_date')->value('lp');                  
                     
                     //ランクマ開始日
                     $first_date=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
