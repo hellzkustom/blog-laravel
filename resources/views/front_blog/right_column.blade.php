@@ -104,6 +104,8 @@
          
           @if(strcmp(url()->current(),route('result'))!=0 )
         <br>
+        <a href="https://stronger-a-day.solunita.net/SF6">ヒトツヨ</a>
+        <br>
         <a href="{{ route('result') }}">戦績詳細</a>
         @endif               
          
