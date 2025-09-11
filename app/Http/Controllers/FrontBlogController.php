@@ -107,6 +107,7 @@ class FrontBlogController extends Controller
                         {
                             if($lp_end>=$rank_data[$i]  )
                             {
+                        
                                 array_push($datas,
                                 self::get_data_detail_old($rank_data[$i],
                                 $rank_data[$i+1],
@@ -214,7 +215,7 @@ class FrontBlogController extends Controller
     }
     public function get_data_detail_old($rank,$pre_rank,$cnt_part,$first_date,$rank_name)
     {
-        
+     
         //ランクアップ日
         $end_date=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
                 ->where([
@@ -224,7 +225,7 @@ class FrontBlogController extends Controller
                     ])
                 ->whereNotNull('lp')
                 ->orderby('articles.post_date')->pluck('articles.post_date')->first();
-        
+
         //ランクアップ後初めての対戦日
         $temp_date=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
                 ->where([
@@ -245,7 +246,8 @@ class FrontBlogController extends Controller
           {
              $start_date=$temp_date[1]->post_date;
           }
-      
+                 
+             
         $win=Street_fighter_v::join('articles','street_fighter_vs.article_id','=','articles.id')
             ->where('street_fighter_vs.character','=',$cnt_part->playing)
             ->whereDate('articles.post_date','>=',$start_date)

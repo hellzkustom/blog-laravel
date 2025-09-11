@@ -100,11 +100,11 @@
         <a href="{{ route('drift_post') }}">ドリフト~</a>
         @endif        --}}
         <br>
-         <a href="https://sf6.halipe.co/myrank/2634206553">LP推移</a>
+         <a href="https://sf6.halipe.co/myrank/2634206553" target="_blank">LP推移</a>
          
           @if(strcmp(url()->current(),route('result'))!=0 )
         <br>
-        <a href="https://stronger-a-day.solunita.net/SF6">ヒトツヨ</a>
+        <a href="https://stronger-a-day.solunita.net" target="_blank">ヒトツヨ</a>
         <br>
         <a href="{{ route('result') }}">戦績詳細</a>
         @endif               
